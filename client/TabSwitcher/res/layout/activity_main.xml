@@ -67,7 +67,7 @@
             android:layout_gravity="left"
             android:src="@drawable/titlebar" />
     </FrameLayout>
-	
+
     <FrameLayout
         android:id="@+id/webcontent"
         android:background="#ff363b40"
@@ -76,10 +76,10 @@
         android:layout_weight="1" >
         <ImageView
             android:layout_height="fill_parent"
-            android:layout_width="fill_parent" 
+            android:layout_width="fill_parent"
 	        android:scaleType="fitXY"
 	        android:src="@drawable/screen_mozilla" />
-		<ListView 
+		<ListView
 	        android:id="@+id/tabslist"
 	        android:layout_width="200dp"
 	        android:layout_height="wrap_content"
