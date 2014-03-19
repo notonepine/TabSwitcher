@@ -1,47 +1,46 @@
 package com.github.notonepine.tabswitcher;
 
-import android.animation.ObjectAnimator;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 
 public class TitleBarFragment extends Fragment {
+	private boolean mSwitching = false;
+
 	private View mView;
-    private View mTitlebar;
-    private View mToolbar;
-    private MainActivity mMainActivity;
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
-    	mMainActivity = (MainActivity) getActivity();
-        mView = inflater.inflate(R.layout.title_bar, container, false);
+	private View toolbar;
+	private MainActivity mMainActivity;
+	private ToolBarAnimator mToolBarAnimator;
 
-        mTitlebar = mView.findViewById(R.id.titlebar);
-        mToolbar = mView.findViewById(R.id.toolbar);
-        mToolbar.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            	toggleTabSwitcherMode(mTitlebar.getTranslationX() < 0);
-            }
-        });
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		mMainActivity = (MainActivity) getActivity();
+		mView = inflater.inflate(R.layout.title_bar, container, false);
 
-        return mView;
-    }
-    
-    // TODO: move this animation somewhere else
-    private void toggleTabSwitcherMode(boolean in) {
-    	mMainActivity.toggleTabList(in);
-        ObjectAnimator anim;
-        if (in) {
-            anim = ObjectAnimator.ofFloat(mTitlebar, "translationX", 0);
-        } else {
-            float pixels = ViewUtils.dpToPx(getActivity(), -250);
-            anim = ObjectAnimator.ofFloat(mTitlebar, "translationX", pixels);
-        }
-        anim.setDuration(200);
-        anim.start();
-    }
+		toolbar = mView.findViewById(R.id.toolbar);
+
+		mToolBarAnimator = new ToolBarAnimator(
+				mView.findViewById(R.id.titlebar),
+				mView.findViewById(R.id.right_titlebar_buttons),
+				mView.findViewById(R.id.new_tab), getActivity(), mSwitching);
+
+		toolbar.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				mToolBarAnimator.toggleToolbarState();
+				mMainActivity.toggleTabListVisibility();
+				mSwitching = !mSwitching;
+			}
+		});
+
+		return mView;
+	}
+
+	public boolean isSwitching() {
+		return mSwitching;
+	}
 }

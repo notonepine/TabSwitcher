@@ -13,12 +13,7 @@ public class MainActivity extends FragmentActivity {
 		mTabListFragment = (TabsListFragment) getFragmentManager().findFragmentById(R.id.tabs_list_fragment);
 	}
 	
-	protected void toggleTabList(boolean show) {
-		if (show) {
-			mTabListFragment.transitionOut();
-		} else {
-			mTabListFragment.transitionIn();
-		}
-		
+	protected void toggleTabListVisibility() {
+		mTabListFragment.toggleVisibility();
 	}
 }

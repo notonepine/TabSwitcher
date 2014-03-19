@@ -63,14 +63,22 @@ public class TabsListFragment extends ListFragment {
 		});
         return mView;
     }
+    
+    public void toggleVisibility() {
+    	if (mView.isShown()) {
+    		transitionOut();
+    	} else {
+    		transitionIn();
+    	}
+    }
 
-    public void transitionIn() {
+    private void transitionIn() {
     	Log.d(LOGTAG, "TRANSITION IN");
     	mView.setVisibility(View.VISIBLE);
     	mView.startAnimation(mAnimationFadeIn);
     }
 
-    public void transitionOut() {
+    private void transitionOut() {
     	Log.d(LOGTAG, "TRANSITION OUT");
     	mView.startAnimation(mAnimationFadeOut);
     }
