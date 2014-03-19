@@ -42,12 +42,12 @@ public class MainActivity extends Activity {
 
 		mTabs = new LinkedList<Tab>();
 		for (int i = 0; i < 1; i++) {
-			mTabs.add(new Tab(R.drawable.tabs_count_foreground, R.drawable.tabs_count_foreground,
+			mTabs.add(new Tab(R.drawable.screen_mozilla, R.drawable.tabs_count_foreground,
 					"Francis Has Changed American CatholicsÕ Attitudes, but Not Their Behavior, a Poll Finds - NYTimes.com"));
-			mTabs.add(new Tab(R.drawable.tabs_count_foreground, R.drawable.tabs_count_foreground,
+			mTabs.add(new Tab(R.drawable.screen_facebook, R.drawable.tabs_count_foreground,
 					"Democrats in Senate Reject Pick by Obama - USAToday.com"));
-			mTabs.add(new Tab(R.drawable.tabs_count_foreground, R.drawable.tabs_count_foreground, "Home of the Mozilla Project Ñ Mozilla"));
-			mTabs.add(new Tab(R.drawable.tabs_count_foreground, R.drawable.tabs_count_foreground, "Google"));
+			mTabs.add(new Tab(R.drawable.screen_yelp, R.drawable.tabs_count_foreground, "Home of the Mozilla Project Ñ Mozilla"));
+			mTabs.add(new Tab(R.drawable.screen_sosh, R.drawable.tabs_count_foreground, "Google"));
 		}
 		
 		mListView = (ListView) findViewById(R.id.tabslist);
