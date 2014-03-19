@@ -10,21 +10,33 @@
         android:background="#ff363b40" >
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:layout_gravity="right"
-            android:layout_toLeftOf="@+id/menu"
-            android:paddingRight="20dp"
-            android:src="@drawable/tabs_count_combo" />
-
-        <ImageView
-            android:id="@id/menu"
+            android:id="@+id/new_tab"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
             android:layout_alignParentRight="true"
-            android:layout_gravity="right"
-            android:paddingRight="10dp"
-            android:src="@drawable/menu" />
+            android:layout_marginRight="-40dp"
+            android:src="@drawable/tab_new"
+            android:visibility="visible" />
+
+        <LinearLayout
+            android:id="@+id/right_titlebar_buttons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:paddingRight="20dp"
+                android:src="@drawable/tabs_count_combo" />
+
+            <ImageView
+                android:id="@+id/menu"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:paddingRight="10dp"
+                android:src="@drawable/menu" />
+        </LinearLayout>
 
         <ImageView
             android:id="@+id/tab_normal"

@@ -13,9 +13,9 @@
         class="com.github.notonepine.tabswitcher.TitleBarFragment"
         tools:layout="@layout/title_bar" />
 
-    <fragment
-        android:id="@+id/webViewFragment"
-        android:name="android.webkit.WebViewFragment"
+    <ImageView
+        android:id="@+id/webViewHolder"
+        android:src="@drawable/screen_mozilla"
         android:layout_width="match_parent"
         android:layout_height="fill_parent" />
 
