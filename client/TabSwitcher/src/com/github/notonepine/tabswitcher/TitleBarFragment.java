@@ -1,7 +1,9 @@
 package com.github.notonepine.tabswitcher;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -33,6 +35,7 @@ public class TitleBarFragment extends Fragment {
 			public void onClick(View v) {
 				mToolBarAnimator.toggleToolbarState();
 				mMainActivity.toggleTabListVisibility();
+				makeHapticFeedback();
 				mSwitching = !mSwitching;
 			}
 		});
@@ -42,5 +45,11 @@ public class TitleBarFragment extends Fragment {
 
 	public boolean isSwitching() {
 		return mSwitching;
+	}
+	
+	private void makeHapticFeedback() {
+		final long[] vibrationPattern = { 0L, 18L };
+		final Vibrator vibrator = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
+		vibrator.vibrate(vibrationPattern, -1);
 	}
 }

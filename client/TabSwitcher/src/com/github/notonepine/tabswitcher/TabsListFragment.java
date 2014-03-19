@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import android.app.ListFragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -82,7 +83,7 @@ public class TabsListFragment extends ListFragment {
     	Log.d(LOGTAG, "TRANSITION OUT");
     	mView.startAnimation(mAnimationFadeOut);
     }
-
+	
     class TabListAdapter extends ArrayAdapter<Tab> {
         public TabListAdapter(Context context) {
             super(context, R.layout.switcher_list_item, mTabs);
