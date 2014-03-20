@@ -15,7 +15,7 @@ public class ToolBarAnimator {
 	private final int TAB_ANIM_DIST = -55;
 
 	/** Duration of the bar animation **/
-	private final int BAR_ANIM_DURATION = 200;
+	private final int BAR_ANIM_DURATION = 80;
 
 	/** Duration of fade of side buttons **/
 	private final int BUTTON_FADE_DURATION = 100;

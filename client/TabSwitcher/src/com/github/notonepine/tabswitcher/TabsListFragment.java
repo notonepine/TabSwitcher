@@ -23,6 +23,7 @@ import android.widget.TextView;
 public class TabsListFragment extends ListFragment {
     final String LOGTAG = "TabsListFragment";
     private View mView;
+    private View mOverlayView;
     private LinkedList<Tab> mTabs;
 
     private Animation mAnimationFadeIn;
@@ -34,6 +35,7 @@ public class TabsListFragment extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.tabs_list, container, false);
+        mOverlayView = mView.findViewById(R.id.preview_overlay);
         mTabs = new LinkedList<Tab>();
         mTabs.add(new Tab(R.drawable.thumbnail_mozilla, "Francis Has Changed American Catholics Attitudes, but Not Their Behavior, a Poll Finds - NYTimes.com"));
         mTabs.add(new Tab(R.drawable.thumbnail_facebook, "Democrats in Senate Reject Pick by Obama - USAToday.com"));
@@ -76,12 +78,12 @@ public class TabsListFragment extends ListFragment {
     private void transitionIn() {
         Log.d(LOGTAG, "TRANSITION IN");
         mView.setVisibility(View.VISIBLE);
-        mView.startAnimation(mAnimationFadeIn);
+        mOverlayView.startAnimation(mAnimationFadeIn);
     }
 
     private void transitionOut() {
         Log.d(LOGTAG, "TRANSITION OUT");
-        mView.startAnimation(mAnimationFadeOut);
+        mOverlayView.startAnimation(mAnimationFadeOut);
     }
 
     class TabListAdapter extends ArrayAdapter<Tab> {
