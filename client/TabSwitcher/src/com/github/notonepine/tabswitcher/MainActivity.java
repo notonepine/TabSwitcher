@@ -13,7 +13,4 @@ public class MainActivity extends FragmentActivity {
 		mTabListFragment = (TabsListFragment) getFragmentManager().findFragmentById(R.id.tabs_list_fragment);
 	}
 	
-	protected void toggleTabListVisibility() {
-		mTabListFragment.toggleVisibility();
-	}
 }

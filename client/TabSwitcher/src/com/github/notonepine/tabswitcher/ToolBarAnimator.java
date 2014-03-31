@@ -1,5 +1,7 @@
 package com.github.notonepine.tabswitcher;
 
+import com.github.notonepine.tabswitcher.R;
+
 import android.content.Context;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
@@ -15,7 +17,7 @@ public class ToolBarAnimator {
 	private final int TAB_ANIM_DIST = -55;
 
 	/** Duration of the bar animation **/
-	private final int BAR_ANIM_DURATION = 80;
+	private final int BAR_ANIM_DURATION = 200;
 
 	/** Duration of fade of side buttons **/
 	private final int BUTTON_FADE_DURATION = 100;
@@ -46,19 +48,22 @@ public class ToolBarAnimator {
 	private Animation barAnimIn, barAnimOut, buttonsAnimIn, buttonsAnimOut,
 			newTabButtonAnimIn, newTabButtonAnimOut;
 
-	public ToolBarAnimator(View titleBar, View rightButtons, View newTabButton,
-			Context context, boolean open) {
-		mTitleBar = titleBar;
-		mRightButtons = rightButtons;
-		mNewTabButton = newTabButton;
+	/* rightButtons */
+
+	public ToolBarAnimator(View view, Context context, boolean open) {
+		mTitleBar = view.findViewById(R.id.titlebar);
+		mRightButtons = view.findViewById(R.id.right_titlebar_buttons);
+		mNewTabButton = view.findViewById(R.id.new_tab);
+
 		mContext = context;
 		mOpen = open;
 
-		//Convert our distances from dp to pixels
+		// Convert our distances from dp to pixels
 		mBarDistance = ViewUtils.dpToPx(mContext, BAR_ANIM_DIST);
 		mTabDistance = ViewUtils.dpToPx(mContext, TAB_ANIM_DIST);
 
-		// Define animations here, so we don't instantiate them every time we call toggle.
+		// Define animations here, so we don't instantiate them every time we
+		// call toggle.
 		barAnimIn = new TranslateAnimation(0, mBarDistance, 0, 0);
 		barAnimOut = new TranslateAnimation(mBarDistance, 0, 0, 0);
 		buttonsAnimIn = new AlphaAnimation(1.0f, 0);
