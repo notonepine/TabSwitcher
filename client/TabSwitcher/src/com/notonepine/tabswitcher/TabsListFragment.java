@@ -1,23 +1,20 @@
-package com.github.notonepine.tabswitcher;
+package com.notonepine.tabswitcher;
 
 import java.util.LinkedList;
+
+import com.github.notonepine.tabswitcher.R;
 
 import android.app.ListFragment;
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Vibrator;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.LinearInterpolator;
-import android.view.animation.TranslateAnimation;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 public class TabsListFragment extends ListFragment {
@@ -34,11 +31,7 @@ public class TabsListFragment extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.tabs_list, container, false);
-        mTabs = new LinkedList<Tab>();
-        mTabs.add(new Tab(R.drawable.thumbnail_mozilla, "Francis Has Changed American Catholics Attitudes, but Not Their Behavior, a Poll Finds - NYTimes.com"));
-        mTabs.add(new Tab(R.drawable.thumbnail_facebook, "Democrats in Senate Reject Pick by Obama - USAToday.com"));
-        mTabs.add(new Tab(R.drawable.thumbnail_twitter, "Home of the Mozilla Project Ñ Mozilla"));
-        mTabs.add(new Tab(R.drawable.thumbnail_yelp, "Google"));
+        setUpTabs();
         setListAdapter(new TabListAdapter(getActivity()));
 
         mAnimationMoveLeft = AnimationUtils.loadAnimation(getActivity(), R.anim.tabs_list_entrance);
@@ -77,6 +70,14 @@ public class TabsListFragment extends ListFragment {
         Log.d(LOGTAG, "TRANSITION IN");
         mView.setVisibility(View.VISIBLE);
         mView.startAnimation(mAnimationFadeIn);
+    }
+    
+    public void setUpTabs(){
+        mTabs = new LinkedList<Tab>();
+        mTabs.add(new Tab(R.drawable.thumbnail_mozilla, "Francis Has Changed American Catholics Attitudes, but Not Their Behavior, a Poll Finds - NYTimes.com"));
+        mTabs.add(new Tab(R.drawable.thumbnail_facebook, "Democrats in Senate Reject Pick by Obama - USAToday.com"));
+        mTabs.add(new Tab(R.drawable.thumbnail_twitter, "Home of the Mozilla Project Ñ Mozilla"));
+        mTabs.add(new Tab(R.drawable.thumbnail_yelp, "Google"));
     }
 
     private void transitionOut() {

@@ -1,4 +1,4 @@
-package com.github.notonepine.tabswitcher;
+package com.notonepine.tabswitcher;
 
 import android.content.Context;
 import android.util.DisplayMetrics;
