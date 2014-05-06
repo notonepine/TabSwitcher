@@ -1,10 +1,10 @@
 package com.github.notonepine.tabswitcher;
 
+import android.animation.Animator;
+import android.animation.Animator.AnimatorListener;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.view.View;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
 
 public class ToolBarAnimator {
 
@@ -43,61 +43,60 @@ public class ToolBarAnimator {
 	private float mTabDistance;
 
 	/** All animations **/
-	private Animation barAnimIn, barAnimOut, buttonsAnimIn, buttonsAnimOut,
-			newTabButtonAnimIn, newTabButtonAnimOut;
+	private ObjectAnimator barAnimIn, barAnimOut, buttonsAnimIn, buttonsAnimOut, newTabButtonAnimIn,
+			newTabButtonAnimOut;
 
-	public ToolBarAnimator(View titleBar, View rightButtons, View newTabButton,
-			Context context, boolean open) {
+	public ToolBarAnimator(View titleBar, View rightButtons, View newTabButton, Context context, boolean open) {
 		mTitleBar = titleBar;
 		mRightButtons = rightButtons;
 		mNewTabButton = newTabButton;
 		mContext = context;
 		mOpen = open;
 
-		//Convert our distances from dp to pixels
+		// Convert our distances from dp to pixels
 		mBarDistance = ViewUtils.dpToPx(mContext, BAR_ANIM_DIST);
 		mTabDistance = ViewUtils.dpToPx(mContext, TAB_ANIM_DIST);
 
-		// Define animations here, so we don't instantiate them every time we call toggle.
-		barAnimIn = new TranslateAnimation(0, mBarDistance, 0, 0);
-		barAnimOut = new TranslateAnimation(mBarDistance, 0, 0, 0);
-		buttonsAnimIn = new AlphaAnimation(1.0f, 0);
-		buttonsAnimOut = new AlphaAnimation(0, 1.0f);
-		newTabButtonAnimIn = new TranslateAnimation(0, mTabDistance, 0, 0);
-		newTabButtonAnimOut = new TranslateAnimation(mTabDistance, 0, 0, 0);
+		new ObjectAnimator();
+		// Define animations here, so we don't instantiate them every time we
+		// call toggle.
+		barAnimIn = ObjectAnimator.ofFloat(mTitleBar, "translationX", 0, mBarDistance).setDuration(BAR_ANIM_DURATION);
+
+		barAnimOut = ObjectAnimator.ofFloat(mTitleBar, "translationX", mBarDistance, 0).setDuration(BAR_ANIM_DURATION);
+
+		buttonsAnimIn = ObjectAnimator.ofFloat(mRightButtons, "alpha", 1.0f, 0).setDuration(BUTTON_FADE_DURATION);
+
+		buttonsAnimOut = ObjectAnimator.ofFloat(mRightButtons, "alpha", 0, 1.0f).setDuration(BUTTON_FADE_DURATION);
+
+		newTabButtonAnimIn = ObjectAnimator.ofFloat(mNewTabButton, "translationX", 0, mTabDistance).setDuration(
+				TAB_BUTTON_DURATION);
+
+		newTabButtonAnimOut = ObjectAnimator.ofFloat(mNewTabButton, "translationX", mTabDistance, 0).setDuration(
+				TAB_BUTTON_DURATION);
 	}
 
 	public void toggleToolbarState() {
-		Animation barAnim;
-		Animation tabAnim;
-		Animation fAnim;
+		ObjectAnimator barAnim;
+		ObjectAnimator tabAnim;
+		ObjectAnimator fAnim;
 
 		if (!mOpen) {
 			tabAnim = newTabButtonAnimIn;
 			barAnim = barAnimIn;
 			fAnim = buttonsAnimIn;
-			tabAnim.setStartOffset(TRANSLATE_OFFSET);
+			tabAnim.setStartDelay(TRANSLATE_OFFSET);
 
 		} else {
 			tabAnim = newTabButtonAnimOut;
 			barAnim = barAnimOut;
 			fAnim = buttonsAnimOut;
 
-			fAnim.setStartOffset(FADE_OFFSET);
+			fAnim.setStartDelay(FADE_OFFSET);
 		}
 
-		barAnim.setFillAfter(true);
-		barAnim.setDuration(BAR_ANIM_DURATION);
-
-		fAnim.setFillAfter(true);
-		fAnim.setDuration(BUTTON_FADE_DURATION);
-
-		tabAnim.setFillAfter(true);
-		tabAnim.setDuration(TAB_BUTTON_DURATION);
-
-		mNewTabButton.startAnimation(tabAnim);
-		mTitleBar.startAnimation(barAnim);
-		mRightButtons.startAnimation(fAnim);
+		tabAnim.start();
+		barAnim.start();
+		fAnim.start();
 
 		mOpen = !mOpen;
 	}
