@@ -4,7 +4,9 @@ import java.util.LinkedList;
 
 import android.app.ListFragment;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
@@ -23,14 +25,16 @@ public class TabsListFragment extends ListFragment {
 	// Views.
 	private View mView;
 	private View mViewOverlay;
-	private ImageView mViewPreview;
-
+	private TabListAdapter mAdapter;
 	private LinkedList<Tab> mTabs;
+	int mCurrentTabIndex;
 
 	private Animation mAnimationFadeIn;
 	private Animation mAnimationFadeOut;
 	private Animation mAnimationMoveLeft;
 	private Animation mAnimationMoveRight;
+
+	OnTabItemHoverListener mOnTabItemHoverListener;
 
 	private MainActivity mMainActivity;
 
@@ -45,15 +49,14 @@ public class TabsListFragment extends ListFragment {
 				mMainActivity.stateToggle();
 			}
 		});
-		mViewPreview = (ImageView) mView.findViewById(R.id.preview);
 		mTabs = new LinkedList<Tab>();
-		mTabs.add(new Tab(R.drawable.thumbnail_mozilla,
-				"Francis Has Changed American Catholics Attitudes, but Not Their Behavior, a Poll Finds - NYTimes.com"));
-
-		mTabs.add(new Tab(R.drawable.thumbnail_facebook, "Democrats in Senate Reject Pick by Obama - USAToday.com"));
-		mTabs.add(new Tab(R.drawable.thumbnail_twitter, "Home of the Mozilla Project Ñ Mozilla"));
-		mTabs.add(new Tab(R.drawable.thumbnail_yelp, "Google"));
-		setListAdapter(new TabListAdapter(mMainActivity));
+		mTabs.add(new Tab(R.drawable.thumbnail_mozilla, "Home of the Mozilla Project Ñ Mozilla",
+				R.drawable.screen_mozilla));
+		mTabs.add(new Tab(R.drawable.thumbnail_facebook, "Joshua Dover on FB", R.drawable.screen_facebook));
+		mTabs.add(new Tab(R.drawable.thumbnail_twitter, "Twitter home", R.drawable.screen_twitter));
+		mTabs.add(new Tab(R.drawable.thumbnail_yelp, "Yelp-Canela", R.drawable.screen_yelp));
+		mAdapter = new TabListAdapter(mMainActivity);
+		setListAdapter(mAdapter);
 
 		mAnimationMoveLeft = AnimationUtils.loadAnimation(mMainActivity, R.anim.tabs_list_entrance);
 		mAnimationMoveLeft.setAnimationListener(new Animation.AnimationListener() {
@@ -100,17 +103,33 @@ public class TabsListFragment extends ListFragment {
 			}
 		});
 
-		mView.setOnDragListener(new OnDragListener() {
+		mViewOverlay.setOnDragListener(new OnDragListener() {
 			@Override public boolean onDrag(View v, DragEvent event) {
-				debug("DRAG ENTERED!!");
-				return false;
+				switch (event.getAction()) {
+				case DragEvent.ACTION_DRAG_EXITED:
+				case DragEvent.ACTION_DROP:
+					if (mMainActivity.getTabChange()) {
+						setCurrentTabAndClose();
+					} else {
+						mMainActivity.stateToggle();
+					}
+					break;
+				case DragEvent.ACTION_DRAG_STARTED:
+				case DragEvent.ACTION_DRAG_ENTERED:
+				case DragEvent.ACTION_DRAG_ENDED:
+					mMainActivity.setTabChange(false);
+
+				default:
+					break;
+				}
+				return true;
 			}
 		});
 		return mView;
 	}
 
 	public void addNewTab() {
-		mTabs.add(new Tab(R.drawable.thumbnail_mozilla, "New Tab Page"));
+		mTabs.add(1, new Tab(R.drawable.thumbnail_mozilla, "New Tab Page", R.drawable.screen_mozilla));
 		setListAdapter(new TabListAdapter(mMainActivity));
 
 	}
@@ -121,6 +140,24 @@ public class TabsListFragment extends ListFragment {
 		} else {
 			transitionIn();
 		}
+	}
+
+	public void setCurrentTabAndClose() {
+		final Tab currentTab = mTabs.remove(mCurrentTabIndex);
+		Log.d(LOGTAG, "Current Tab Size: " + mTabs.size());
+		mTabs.addFirst(currentTab);
+		setListAdapter(mAdapter);
+		new AsyncTask<Integer, Void, Void>(
+
+		) {
+
+			@Override protected Void doInBackground(Integer... params) {
+				mMainActivity.setPreview(params[0]);
+				return null;
+			}
+		}.execute(currentTab.getPageId());
+		mMainActivity.setPreview(currentTab.getPageId());
+		mMainActivity.stateToggle();
 	}
 
 	public boolean tabsShowing() {
@@ -148,11 +185,22 @@ public class TabsListFragment extends ListFragment {
 			if (convertView == null) {
 				convertView = LayoutInflater.from(getContext()).inflate(R.layout.switcher_list_item, null);
 				ImageView image = (ImageView) convertView.findViewById(R.id.thumbnail);
-				image.setImageResource(tab.getResId());
+				image.setImageResource(tab.getThumbnailId());
 
 				TextView titleView = (TextView) convertView.findViewById(R.id.title);
 				titleView.setText(tab.getTitle());
 			}
+
+			convertView.setOnClickListener(new OnClickListener() {
+
+				@Override public void onClick(View v) {
+					mCurrentTabIndex = position;
+					setCurrentTabAndClose();
+
+				}
+			});
+
+			convertView.setOnDragListener(new TabItemDragListener(position));
 
 			// convertView.setOnDragListener(new TabItemDragListener(position));
 			/*
@@ -185,5 +233,58 @@ public class TabsListFragment extends ListFragment {
 
 	public void setTabs(LinkedList<Tab> tabs) {
 		mTabs = tabs;
+	}
+
+	class TabItemDragListener implements OnDragListener {
+		int mTabIndex;
+
+		public TabItemDragListener(int tabIndex) {
+			mTabIndex = tabIndex;
+		}
+
+		@Override public boolean onDrag(View v, DragEvent event) {
+			switch (event.getAction()) {
+			case DragEvent.ACTION_DRAG_ENTERED:
+
+				mOnTabItemHoverListener.onTabItemHover(mTabs.get(getListView().getPositionForView(v)));
+				mCurrentTabIndex = mTabIndex;
+				mMainActivity.setTabChange(true);
+
+				// mLastHoveredTabPosition = mList.getPositionForView(v);
+				debug("CURRENT TAB: " + mCurrentTabIndex);
+				break;
+			case DragEvent.ACTION_DRAG_STARTED:
+				// mDropping = false;
+				break;
+			case DragEvent.ACTION_DRAG_EXITED:
+				break;
+			case DragEvent.ACTION_DROP:
+				// mDropping = true;
+				// if (mInDragMode) {
+				// Tab tab = mTabs.get(mList.getPositionForView(v));
+				setCurrentTabAndClose();
+				// mOnTabItemHoverListener.onDrop(tab);
+				// }
+				break;
+			case DragEvent.ACTION_DRAG_ENDED:
+				// if (!mDropping) {
+				// if (mLastHoveredTabPosition != -1) {
+				// setCurrentTabAndClose(mLastHoveredTabPosition);
+				// mLastHoveredTabPosition = -1;
+				// }
+				// hide();
+				// }
+				break;
+			default:
+				break;
+			}
+			return true;
+		}
+	}
+
+	interface OnTabItemHoverListener {
+		public void onTabItemHover(Tab item);
+
+		public void onDrop(Tab item);
 	}
 }

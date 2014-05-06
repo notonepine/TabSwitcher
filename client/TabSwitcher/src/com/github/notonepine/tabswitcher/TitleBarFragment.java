@@ -4,14 +4,17 @@ import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.DragShadowBuilder;
 import android.view.View.OnClickListener;
+import android.view.View.OnDragListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 public class TitleBarFragment extends Fragment {
 	private boolean mSwitching = false;
@@ -30,7 +33,8 @@ public class TitleBarFragment extends Fragment {
 		/* newTabButton */mView.findViewById(R.id.new_tab),
 		/* context */getActivity(),
 		/* open */mSwitching);
-		mView.findViewById(R.id.tabs_button).setOnTouchListener(tabSwitchTouchListener(mView));
+		mView.findViewById(R.id.tabs_button).setOnTouchListener(
+				tabSwitchTouchListener(mView.findViewById(R.id.tab_alternative)));
 
 		((ImageView) mView.findViewById(R.id.new_tab)).setOnClickListener(new OnClickListener() {
 
@@ -39,6 +43,29 @@ public class TitleBarFragment extends Fragment {
 			}
 		});
 
+//		mView.findViewById(R.id.toolbar).setOnDragListener(new OnDragListener() {
+//			@Override public boolean onDrag(View v, DragEvent event) {
+//				switch (event.getAction()) {
+//				case DragEvent.ACTION_DRAG_EXITED:
+//				case DragEvent.ACTION_DROP:
+//					if (mMainActivity.getTabChange()) {
+//						mMainActivity.setCurrentTabAndClose();
+//					} else {
+//						mMainActivity.stateToggle();
+//					}
+//					break;
+//				case DragEvent.ACTION_DRAG_STARTED:
+//				case DragEvent.ACTION_DRAG_ENTERED:
+//				case DragEvent.ACTION_DRAG_ENDED:
+////					mMainActivity.setTabChange(false);
+//
+//				default:
+//					break;
+//				}
+//				return true;
+//			}
+//		});
+
 		return mView;
 	}
 
@@ -46,13 +73,15 @@ public class TitleBarFragment extends Fragment {
 		return mSwitching;
 	}
 
-	private OnTouchListener tabSwitchTouchListener(View v) {
+	private OnTouchListener tabSwitchTouchListener(final View view) {
 		return new OnTouchListener() {
 
 			@Override public boolean onTouch(View v, MotionEvent event) {
 				if (event.getAction() == MotionEvent.ACTION_DOWN) {
-					DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(new View(mMainActivity));
-					new View(mMainActivity).startDrag(null, shadowBuilder, null, 0);
+
+					DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
+					view.startDrag(null, shadowBuilder, null, View.INVISIBLE);
+
 					mToolBarAnimator.toggleToolbarState();
 					mMainActivity.toggleTabListVisibility();
 					mMainActivity.makeHapticFeedback();

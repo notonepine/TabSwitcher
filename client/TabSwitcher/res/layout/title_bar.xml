@@ -24,14 +24,26 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true" >
 
-            <ImageView
-                android:id="@+id/tabs_button"
+            <RelativeLayout
+                android:id="@+id/container_tab"
                 android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:paddingRight="20dp"
-                android:src="@drawable/tabs_count_combo" />
+                android:layout_height="48dp" >
 
-            <ImageView
+                <ImageView
+                    android:id="@+id/tabs_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:paddingRight="20dp"
+                    android:src="@drawable/tabs_count_combo" />
+
+                <RelativeLayout
+                    android:id="@+id/tab_alternative"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:paddingRight="20dp" />
+            </RelativeLayout>
+
+            <ImageView 
                 android:id="@+id/menu"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"

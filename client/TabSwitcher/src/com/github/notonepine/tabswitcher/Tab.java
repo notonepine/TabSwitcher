@@ -1,27 +1,38 @@
 package com.github.notonepine.tabswitcher;
 
 public class Tab {
-    private int mResId;
-    private String mTitle;
+	private int mThumbnailId;
+	private int mPageId;
+	private String mTitle;
 
-    public Tab(int resId, String title) {
-        setResId(resId);
-        setTitle(title);
-    }
+	public Tab(int resId, String title, int pageId) {
+		setThumbnailId(resId);
+		setTitle(title);
+		setPageId(pageId);
 
-    public int getResId() {
-        return mResId;
-    }
+	}
 
-    public void setResId(int resId) {
-        mResId = resId;
-    }
+	public int getThumbnailId() {
+		return mThumbnailId;
+	}
 
-    public void setTitle(String title) {
-        mTitle = title;
-    }
+	public void setThumbnailId(int resId) {
+		mThumbnailId = resId;
+	}
 
-    public String getTitle() {
-        return mTitle;
-    }
+	public int getPageId() {
+		return mPageId;
+	}
+
+	public void setPageId(int resId) {
+		mPageId = resId;
+	}
+
+	public void setTitle(String title) {
+		mTitle = title;
+	}
+
+	public String getTitle() {
+		return mTitle;
+	}
 }
