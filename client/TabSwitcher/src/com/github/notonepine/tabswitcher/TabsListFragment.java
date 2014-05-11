@@ -129,9 +129,25 @@ public class TabsListFragment extends ListFragment {
 	}
 
 	public void addNewTab() {
-		mTabs.add(1, new Tab(R.drawable.thumbnail_mozilla, "New Tab Page", R.drawable.screen_mozilla));
-		setListAdapter(new TabListAdapter(mMainActivity));
 
+		mMainActivity.stateToggle();
+
+	}
+
+	public void addNewTabAndClose() {
+		mTabs.addFirst(new Tab(R.drawable.thumbnail_mozilla, "New Tab Page", R.drawable.screen_mozilla));
+		setListAdapter(new TabListAdapter(mMainActivity));
+		new AsyncTask<Integer, Void, Void>(
+
+		) {
+
+			@Override protected Void doInBackground(Integer... params) {
+				mMainActivity.setPreview(params[0]);
+				return null;
+			}
+		}.execute(mTabs.getFirst().getPageId());
+		mMainActivity.setPreview(mTabs.getFirst().getPageId());
+		mMainActivity.stateToggle();
 	}
 
 	public void toggleVisibility() {

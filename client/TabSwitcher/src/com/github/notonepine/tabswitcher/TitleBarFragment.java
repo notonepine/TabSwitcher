@@ -39,32 +39,27 @@ public class TitleBarFragment extends Fragment {
 		((ImageView) mView.findViewById(R.id.new_tab)).setOnClickListener(new OnClickListener() {
 
 			@Override public void onClick(View v) {
-				mMainActivity.mTabListFragment.addNewTab();
+				mMainActivity.mTabListFragment.addNewTabAndClose();
 			}
 		});
 
-//		mView.findViewById(R.id.toolbar).setOnDragListener(new OnDragListener() {
-//			@Override public boolean onDrag(View v, DragEvent event) {
-//				switch (event.getAction()) {
-//				case DragEvent.ACTION_DRAG_EXITED:
-//				case DragEvent.ACTION_DROP:
-//					if (mMainActivity.getTabChange()) {
-//						mMainActivity.setCurrentTabAndClose();
-//					} else {
-//						mMainActivity.stateToggle();
-//					}
-//					break;
-//				case DragEvent.ACTION_DRAG_STARTED:
-//				case DragEvent.ACTION_DRAG_ENTERED:
-//				case DragEvent.ACTION_DRAG_ENDED:
-////					mMainActivity.setTabChange(false);
-//
-//				default:
-//					break;
-//				}
-//				return true;
-//			}
-//		});
+		mView.findViewById(R.id.new_tab).setOnDragListener(new OnDragListener() {
+			@Override public boolean onDrag(View v, DragEvent event) {
+				switch (event.getAction()) {
+				case DragEvent.ACTION_DRAG_EXITED:
+				case DragEvent.ACTION_DROP:
+					mMainActivity.mTabListFragment.addNewTabAndClose();
+					break;
+				case DragEvent.ACTION_DRAG_STARTED:
+				case DragEvent.ACTION_DRAG_ENTERED:
+				case DragEvent.ACTION_DRAG_ENDED:
+					// mMainActivity.setTabChange(false);
+				default:
+					break;
+				}
+				return true;
+			}
+		});
 
 		return mView;
 	}
